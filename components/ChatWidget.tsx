@@ -18,7 +18,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ initialMessage, onInitialMessag
   // Initialize the chat session once when the component mounts
   useEffect(() => {
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+      const ai = new GoogleGenAI({ apiKey: "AIzaSyAFbQ7pePD8XebDcNbHoDBXNu3H7aQI_3I" });
       const newChat = ai.chats.create({
         model: 'gemini-2.5-flash',
         config: {
