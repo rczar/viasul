@@ -1,6 +1,93 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI, Chat } from '@google/genai';
+import ReactMarkdown from 'react-markdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { ChatMessage } from '../types';
+
+// Componente para renderizar mensagens com suporte a markdown
+const MessageContent: React.FC<{ text: string }> = ({ text }) => {
+  // Regex para detectar números de WhatsApp no formato: +XX XX XXXXX-XXXX
+  const whatsappRegex = /(\+\d{2}\s*\d{2}\s*\d{4,5}-\d{4})/g;
+  
+  // Se houver número de WhatsApp, processar o texto
+  if (whatsappRegex.test(text)) {
+    const parts = text.split(whatsappRegex);
+    
+    return (
+      <div className="space-y-2">
+        {parts.map((part, index) => {
+          if (!part) return null;
+          
+          // Verifica se é um número de WhatsApp
+          if (/^\+\d{2}\s*\d{2}\s*\d{4,5}-\d{4}$/.test(part)) {
+            // Remove caracteres especiais para criar o link
+            const cleanNumber = part.replace(/\D/g, '');
+            const whatsappUrl = `https://wa.me/${cleanNumber}?text=Olá! Gostaria de mais informações sobre os seguros.`;
+            
+            return (
+              <div key={index} className="inline-block">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} className="w-5 h-5" />
+                  {part}
+                </a>
+              </div>
+            );
+          }
+          
+          // Renderizar parte normal com markdown
+          return (
+            <div key={index}>
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p className="mb-2">{children}</p>,
+                  strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                  em: ({ children }) => <em className="italic">{children}</em>,
+                  ul: ({ children }) => <ul className="list-disc list-inside mb-2">{children}</ul>,
+                  ol: ({ children }) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
+                  li: ({ children }) => <li className="mb-1">{children}</li>,
+                  a: ({ href, children }) => (
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {part}
+              </ReactMarkdown>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+  
+  // Se não houver número de WhatsApp, apenas renderizar markdown normalmente
+  return (
+    <ReactMarkdown
+      components={{
+        p: ({ children }) => <p className="mb-2">{children}</p>,
+        strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+        em: ({ children }) => <em className="italic">{children}</em>,
+        ul: ({ children }) => <ul className="list-disc list-inside mb-2">{children}</ul>,
+        ol: ({ children }) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
+        li: ({ children }) => <li className="mb-1">{children}</li>,
+        a: ({ href, children }) => (
+          <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+            {children}
+          </a>
+        ),
+      }}
+    >
+      {text}
+    </ReactMarkdown>
+  );
+};
 
 interface ChatWidgetProps {
   initialMessage?: string | null;
@@ -22,7 +109,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ initialMessage, onInitialMessag
       const newChat = ai.chats.create({
         model: 'gemini-2.5-flash',
         config: {
-          systemInstruction: 'Você é um assistente virtual da Viasul Corretora de Seguros. Seu nome é Via. Seja amigável, prestativo e especializado em seguros. Forneça informações claras e concisas sobre seguros de automóvel, residencial, de vida e empresarial. Se não souber a resposta, diga que vai verificar com um especialista. Sempre se ofereça para conectar o usuário com um corretor humano via WhatsApp para cotações ou detalhes mais complexos.',
+          systemInstruction: 'Você é um assistente virtual da Viasul Corretora de Seguros. Seu nome é Via. Seja amigável, prestativo e especializado em seguros. Forneça informações claras e concisas sobre seguros de automóvel, residencial, de vida e empresarial. Se não souber a resposta, diga que vai verificar com um especialista. Use **negrito** para destacar informações importantes e termos-chave. Sempre se ofereça para conectar o usuário com um corretor humano via WhatsApp. Quando mencionar o número do WhatsApp, use este formato: **+55 44 99949-7898**. Use formatação markdown com **negrito**, *itálico* e listas quando apropriado para melhorar a legibilidade.',
         },
       });
       setChat(newChat);
@@ -104,7 +191,13 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ initialMessage, onInitialMessag
             {messages.map((msg, index) => (
               <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] p-3 rounded-2xl ${msg.role === 'user' ? 'bg-viasul-wine-medium text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-bl-none'}`}>
-                  <p className="text-sm" style={{ whiteSpace: 'pre-wrap' }}>{msg.text}</p>
+                  <div className="text-sm" style={{ whiteSpace: 'pre-wrap' }}>
+                    {msg.role === 'model' ? (
+                      <MessageContent text={msg.text} />
+                    ) : (
+                      msg.text
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
