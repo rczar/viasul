@@ -48,7 +48,7 @@ const About: React.FC = () => {
           </div>
           <div>
             <img 
-              src="https://picsum.photos/id/1018/600/400" 
+              src="https://img.freepik.com/fotos-premium/um-casal-jovem-com-uma-bonita-menina-de-dois-anos_1048944-13139194.jpg?semt=ais_hybrid&w=740&q=80" 
               alt="Paisagem tranquila representando segurança" 
               className="rounded-2xl shadow-xl w-full h-auto object-cover"
             />

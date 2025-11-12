@@ -109,12 +109,12 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ initialMessage, onInitialMessag
       const newChat = ai.chats.create({
         model: 'gemini-2.5-flash',
         config: {
-          systemInstruction: 'Você é um assistente virtual da Viasul Corretora de Seguros. Seu nome é Via. Seja amigável, prestativo e especializado em seguros. Forneça informações claras e concisas sobre seguros de automóvel, residencial, de vida e empresarial. Se não souber a resposta, diga que vai verificar com um especialista. Use **negrito** para destacar informações importantes e termos-chave. Sempre se ofereça para conectar o usuário com um corretor humano via WhatsApp. Quando mencionar o número do WhatsApp, use este formato: **+55 44 99949-7898**. Use formatação markdown com **negrito**, *itálico* e listas quando apropriado para melhorar a legibilidade.',
+          systemInstruction: 'Você é um assistente virtual da Viasul Corretora de Seguros. Seu nome é VIA. Seja amigável, prestativo e especializado em seguros. Forneça informações claras e concisas sobre seguros de automóvel, residencial, de vida e empresarial. Se não souber a resposta, diga que vai verificar com um especialista. Use **negrito** para destacar informações importantes e termos-chave (exceto no número do WhatsApp). Sempre se ofereça para conectar o usuário com um corretor humano via WhatsApp. Quando mencionar o número do WhatsApp, use este formato: +55 44 99949-7898. Use formatação markdown com **negrito**, *itálico* e listas quando apropriado para melhorar a legibilidade.',
         },
       });
       setChat(newChat);
       setMessages([
-        { role: 'model', text: 'Olá! Eu sou a Via, sua assistente virtual da Viasul Seguros. Como posso te ajudar hoje?' }
+        { role: 'model', text: 'Olá! Eu sou a VIA, sua assistente virtual da Viasul Seguros. Como posso te ajudar hoje?' }
       ]);
     } catch (error) {
         console.error("Failed to initialize chat:", error);
@@ -177,7 +177,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ initialMessage, onInitialMessag
         <div className="bg-white rounded-2xl shadow-2xl flex flex-col h-[70vh] max-h-[600px]">
           <header className="bg-viasul-wine-dark text-white p-4 rounded-t-2xl flex justify-between items-center">
             <div>
-              <h3 className="font-bold text-lg">Assistente Viasul</h3>
+              <h3 className="font-bold text-lg">Assistente VIA</h3>
               <p className="text-sm opacity-80">Online</p>
             </div>
             <button onClick={() => setIsExpanded(false)} className="text-white hover:opacity-75">
@@ -244,10 +244,10 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ initialMessage, onInitialMessag
       {/* Floating Action Button (FAB) */}
       <button 
         onClick={() => setIsExpanded(true)}
-        className={`fixed bottom-5 right-5 z-50 bg-viasul-wine-medium text-white p-4 rounded-full shadow-lg hover:bg-viasul-wine-dark transition-all duration-300 ease-in-out transform hover:scale-110 ${isExpanded ? 'opacity-0 scale-0 pointer-events-none' : 'opacity-100 scale-100'}`}
+        className={`fixed bottom-5 right-5 z-50 bg-red-400 text-white p-5 rounded-full shadow-lg hover:bg-red-500 transition-all duration-300 ease-in-out transform hover:scale-110 ${isExpanded ? 'opacity-0 scale-0 pointer-events-none' : 'opacity-100 scale-100'}`}
         aria-label="Abrir chat com assistente virtual"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
       </button>

@@ -39,7 +39,7 @@ const Header: React.FC = () => {
                 </nav>
 
                 <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="hidden md:inline-block bg-white text-viasul-wine-dark font-bold py-2 px-5 rounded-full hover:bg-viasul-wine-light transition-colors shadow-sm">
-                    Fale Conosco
+                    <p className="text-viasul-wine-dark hover:text-white">Fale Conosco</p>
                 </a>
 
                 {/* Mobile Menu Button */}
