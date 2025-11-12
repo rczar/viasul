@@ -15,7 +15,7 @@ const Hero: React.FC<HeroProps> = ({ onCTAClick }) => {
 
     return (
         <section id="hero" className="relative bg-viasul-wine-dark text-white min-h-screen flex items-center">
-            <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=2070&auto=format&fit=crop')" }}></div>
+            <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: "url('https://blog.opipari.com.br/wp-content/uploads/2025/10/image-2.jpg')" }}></div>
             <div className="relative container mx-auto px-6 text-center z-10">
                  <div className={`transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'}`}>
                     <h1 className="text-4xl md:text-6xl font-serif font-bold mb-4 leading-tight">
